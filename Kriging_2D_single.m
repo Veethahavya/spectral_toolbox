@@ -10,15 +10,15 @@ s.nugget     = 0;                                                       % nugget
 %s.kappa     = 1.5;                                                     % shape parameter (for matern covariance only)
 %s.micro     = 0.1;                                                     % microscale smoothing parameter (before nugget)
 s.opt_params = [];
-s.opt = 'true';
-s.opt_itr = 100;
+s.opt = 'true';                                                         % switch to turn variogram optimization on/off
+s.opt_itr = 100;                                                        % number of iterations for variogram optimisation
 
 %% definition of the grid for the unknowns s
 s.n_pts      = [98  98];                                                % number of unknowns in each direction
 s.d_pts      = [1   1];                                                 % grid spacing in each direction
 s.npts       = prod(s.n_pts);                                           % number of unknowns (not required unless used in problem generation)
 
-%% definition of mean - _add influence of topo from DEM here?_
+%% definition of mean
 b.model      = 'zero';                                                  % uncertain, known, zero or unknown
 b.n          = 1;                                                       % number of base functions
 b.beta_pri   = 0;                                                       % prior mean coefficients for trend functions
