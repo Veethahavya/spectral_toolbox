@@ -121,12 +121,22 @@ end
 %% Comparision of estimate with initial_heads from modflow
 init_h_comp_switch = 0;
     if init_h_comp_switch == 1
-    load initial_heads
-    surf(local_estimate-initial_heads)
-    colorbar
-    set(gca,'Ydir','reverse')
-    hold on
-    scatter(row,col,10,'red','filled')
-    hold off
-    mean_diff_init_and_est = mean(abs(local_estimate(63:98,:)-initial_heads(63:98,:)),'all');
+        load initial_heads
+        surf(local_estimate-initial_heads)
+        colorbar
+        set(gca,'Ydir','reverse')
+        hold on
+        scatter(row,col,10,'red','filled')
+        hold off
+        mean_diff_init_and_est = mean(abs(local_estimate(63:98,:)-initial_heads(63:98,:)),'all');
     end
+    
+%% plotting of the optimal params through iterations
+plt_Sopt_switch = 1;
+if plt_Sopt_switch == 1
+    plt_betas = cell2mat(s.opt_params);
+    plot(plt_betas(1:2:200))
+    hold on
+    plot(plt_betas(2:2:200))
+    legend('beta1','beta2')
+end

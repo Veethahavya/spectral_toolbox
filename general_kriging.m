@@ -241,7 +241,7 @@ if isequal(options.solver,'standard') || isequal(options.estvar,'standard')
     Qyy = generate_covariance_full(s,y.x_pts);    % measurement error is added later
     if isequal(s.opt,'true')
         for i=1:s.opt_itr
-            s.opt_params{i} = variogram_opt(Qyy,y.values,y.edk_dem,y.npts); %to find the optimal Variogram Parametres
+            s.opt_params{i} = variogram_opt(Qyy,y.values,y.edk_dem,y.npts); % to find the optimal Variogram Parametres
             s.variance = abs(s.opt_params{i}(1));
             s.lambda = [abs(s.opt_params{i}(2)) abs(s.opt_params{i}(2))];
             Qyy = generate_covariance_full(s,y.x_pts);
