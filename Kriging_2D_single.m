@@ -10,7 +10,7 @@ s.nugget     = 0;                                                       % nugget
 %s.kappa     = 1.5;                                                     % shape parameter (for matern covariance only)
 %s.micro     = 0.1;                                                     % microscale smoothing parameter (before nugget)
 s.opt_params = [];
-s.opt = 'true';                                                         % switch to turn variogram optimization on/off
+s.opt = 'false';                                                         % switch to turn variogram optimization on/off
 s.opt_itr = 100;                                                        % number of iterations for variogram optimisation
 
 %% definition of the grid for the unknowns s
@@ -133,7 +133,7 @@ init_h_comp_switch = 0;
     
 %% plotting of the optimal params through iterations
 plt_Sopt_switch = 1;
-if plt_Sopt_switch == 1
+if plt_Sopt_switch == 1 && isequal(s.opt,'true')
     plt_betas = cell2mat(s.opt_params);
     plot(plt_betas(1:2:200))
     hold on
