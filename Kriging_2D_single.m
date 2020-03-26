@@ -10,8 +10,8 @@ s.nugget     = 0;                                                       % nugget
 %s.kappa     = 1.5;                                                     % shape parameter (for matern covariance only)
 %s.micro     = 0.1;                                                     % microscale smoothing parameter (before nugget)
 s.opt_params = [];
-s.opt = 'false';                                                         % switch to turn variogram optimization on/off
-s.opt_itr = 100;                                                        % number of iterations for variogram optimisation
+s.opt = 'true';                                                         % switch to turn variogram optimization on/off
+s.opt_itr = 1000;                                                        % number of iterations for variogram optimisation
 
 %% definition of the grid for the unknowns s
 s.n_pts      = [98  98];                                                % number of unknowns in each direction
@@ -38,7 +38,7 @@ y.error      = 0;                                                       % measur
 y.values     = transpose(heads(1,:));
 % y.edk_dem = y.values + 20;
 for i=1:y.npts
-    y.edk_dem(i,1) = (y.values(i,1) + 10*rand());
+    y.edk_dem(i,1) = (y.values(i,1) + 20 + 10*rand());
 end
 
 %% kriging method options
@@ -122,6 +122,7 @@ end
 init_h_comp_switch = 0;
     if init_h_comp_switch == 1
         load initial_heads
+        figure
         surf(local_estimate-initial_heads)
         colorbar
         set(gca,'Ydir','reverse')
@@ -133,10 +134,17 @@ init_h_comp_switch = 0;
     
 %% plotting of the optimal params through iterations
 plt_Sopt_switch = 1;
+figure
 if plt_Sopt_switch == 1 && isequal(s.opt,'true')
-    plt_betas = cell2mat(s.opt_params);
-    plot(plt_betas(1:2:200))
+    plt_opt_params = cell2mat(s.opt_params);
+    plot(plt_opt_params(1:5:5*s.opt_itr))
     hold on
-    plot(plt_betas(2:2:200))
-    legend('beta1','beta2')
+    plot(plt_opt_params(2:5:5*s.opt_itr))
+    hold on
+    plot(plt_opt_params(3:5:5*s.opt_itr))
+    hold on
+    plot(plt_opt_params(4:5:5*s.opt_itr))
+    hold on
+    plot(plt_opt_params(5:5:5*s.opt_itr))
+    legend('beta1','beta2','lambda1','lambda2','variance')
 end

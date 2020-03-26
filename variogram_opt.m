@@ -1,39 +1,47 @@
-function [opt_params] = variogram_opt(Cyy,data,DEM,n)
-%VARIOGRAM_OPT finds the optimum variogram parametres for the data given an exponential variogram.
+function [opt_params] = variogram_opt(Cyy,y,s)
+%VARIOGRAM_OPT finds the optimum variogram parametres for the y.values given an exponential variogram.
 
 %%
-init_params = [-20 10];
+npts  = numel(y.x_pts{1});
+dx_pts = cell(s.nd,1);
+for i=1:s.nd
+  dx_pts{i} = y.x_pts{i}*ones(1,npts)-ones(npts,1)*y.x_pts{i}';
+end
+% h_eff      = sqrt((dx_pts{1}/s.lambda(1)).^2 + (dx_pts{2}/s.lambda(2)).^2);
 
-%mu = init_params(1)*ones(n,1) + init_params(2)*DEM;
+% Cyy = s.variance * exp(-(sqrt((dx_pts{1}/s.lambda(1)).^2 + (dx_pts{2}/s.lambda(2)).^2)));
 
-% f = (1/sqrt(det(Cyy)))*exp(-0.5*(data-mu)'*inv(Cyy)*(data-mu));
-% fn = @(init_params)-log(f);
 
-func = @(init_params)0.5*log(det(Cyy))+0.5*(data-(init_params(1)*ones(n,1) + init_params(2)*DEM))'*inv(Cyy)*(data-(init_params(1)*ones(n,1) + init_params(2)*DEM));
+%%
+init_params = [-20 1 s.lambda(1) s.lambda(2) s.variance];
+init_params_lb = [0 0 5 5 100];
+init_params_ub = [abs(max(y.values-y.edk_dem))*10 10 150 150 1000];
 
-%options = optimoptions(@lsqnonlin,'
-% options.Algorithm = 'trust-region-reflective';
-% options.iterations = 10000;
-% options.funcCount = 1000;
-% options.FunctionTolerance = 1e-10;
-% options.Display = 'iter-detailed';
-opt_params = fminsearch(func,init_params);
+func = @(init_params)0.5*log(det(init_params(5)*exp(-(sqrt((dx_pts{1}/init_params(3)).^2 + (dx_pts{2}/init_params(4)).^2)))))+0.5*(y.values-(init_params(1)*ones(npts,1) + init_params(2)*y.edk_dem))'*inv(init_params(5)*exp(-(sqrt((dx_pts{1}/init_params(3)).^2 + (dx_pts{2}/init_params(4)).^2))))*(y.values-(init_params(1)*ones(npts,1) + init_params(2)*y.edk_dem));
 
+%options.Algorithm = 'trust-region-reflective';
+%options.iterations = 10000;
+%options.funcCount = 1000;
+%options.FunctionTolerance = 1e-10;
+options.Display = 'final';
+warning('off')
+% end the opt command (next line) with semicolon to supress all output
+opt_params = lsqnonlin(func,init_params,[],[],options)
 
 %%
 % init_params = [10 -1];
 % for i=1:100000
-%     mu = init_params(1)*ones(n,1) + init_params(2)*DEM;
+%     mu = init_params(1)*ones(n,1) + init_params(2)*y.edk_dem;
 % 
-% %     f = (1/sqrt(det(Cyy)))*exp(-0.5*(data-mu)'*inv(Cyy)*(data-mu));
+% %     f = (1/sqrt(det(Cyy)))*exp(-0.5*(y.values-mu)'*inv(Cyy)*(y.values-mu));
 % %     fn = @(init_params)-log(f);
 %     
-%     func = @(init_params)0.5*log(det(Cyy))+0.5*(data-mu)'*inv(Cyy)*(data-mu);
+%     func = @(init_params)0.5*log(det(Cyy))+0.5*(y.values-mu)'*inv(Cyy)*(y.values-mu);
 % 
 %     fn_val(i) = func(init_params);
-%     diff(i) = mean(data-mu);
+%     diff(i) = mean(y.values-mu);
 %     
-%     if(mean(data-mu)<0.0001)
+%     if(mean(y.values-mu)<0.0001)
 %         opt_params = init_params;
 %         break
 %     end
