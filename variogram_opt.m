@@ -9,6 +9,7 @@ for i=1:s.nd
 end
 % h_eff      = sqrt((dx_pts{1}/s.lambda(1)).^2 + (dx_pts{2}/s.lambda(2)).^2);
 
+% Cyy = s.variance * exp(-h_eff);
 % Cyy = s.variance * exp(-(sqrt((dx_pts{1}/s.lambda(1)).^2 + (dx_pts{2}/s.lambda(2)).^2)));
 
 

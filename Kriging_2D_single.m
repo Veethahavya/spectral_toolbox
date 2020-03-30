@@ -11,7 +11,7 @@ s.nugget     = 0;                                                       % nugget
 %s.micro     = 0.1;                                                     % microscale smoothing parameter (before nugget)
 s.opt_params = [];
 s.opt = 'true';                                                         % switch to turn variogram optimization on/off
-s.opt_itr = 1000;                                                        % number of iterations for variogram optimisation
+s.opt_itr = 10;                                                         % number of iterations for variogram optimisation
 
 %% definition of the grid for the unknowns s
 s.n_pts      = [98  98];                                                % number of unknowns in each direction
@@ -38,7 +38,7 @@ y.error      = 0;                                                       % measur
 y.values     = transpose(heads(1,:));
 % y.edk_dem = y.values + 20;
 for i=1:y.npts
-    y.edk_dem(i,1) = (y.values(i,1) + 20 + 10*rand());
+    y.edk_dem(i,1) = (y.values(i,1) + 20 + 10*rand());                  % DEM = GWL + 20 + noise
 end
 
 %% kriging method options
