@@ -11,7 +11,7 @@ s.nugget     = 0;                                                       % nugget
 %s.micro     = 0.1;                                                     % microscale smoothing parameter (before nugget)
 s.opt_params = [];
 s.opt = 'true';                                                         % switch to turn variogram optimization on/off
-s.opt_itr = 10;                                                         % number of iterations for variogram optimisation
+s.opt_itr = 1000;                                                         % number of iterations for variogram optimisation
 
 %% definition of the grid for the unknowns s
 s.n_pts      = [98  98];                                                % number of unknowns in each direction
@@ -36,10 +36,11 @@ y.indices    = transpose(sub2ind(s.n_pts,row,col));                     % measur
 %% definition of data set y
 y.error      = 0;                                                       % measurement error (scalar) expressed as variance
 y.values     = transpose(heads(1,:));
-% y.edk_dem = y.values + 20;
-for i=1:y.npts
-    y.edk_dem(i,1) = (y.values(i,1) + 20 + 10*rand());                  % DEM = GWL + 20 + noise
-end
+% y.dem = y.values + 20;
+% for i=1:y.npts
+%     y.dem(i,1) = (y.values(i,1) + 20 + 10*rand());                  % DEM = GWL + 20 + noise
+% end
+y.dem = [30 7 5 5 25 9 50 50 37 8];
 
 %% kriging method options
 options.superpos = 'fft';                                               % superposition method: fft or standard

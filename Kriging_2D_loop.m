@@ -38,15 +38,16 @@ for i = m:n
     col = [94	83	79	98	84	85	97	94	91	84];
     row = [33	71	82	84	43	58	09	17	27	51];
     %obs_names = ['Condors','Wratts','Selmes','Murphys','Pauls','Giffords','OldMCB','MCB','Catch_sh','P_Neal'];
-    y.indices    = transpose(sub2ind(s.n_pts,row,col));                     % measurement indices in field of unknowns (required for irregular grids) (r-v; c-h)
+    y.indices = transpose(sub2ind(s.n_pts,row,col));                        % measurement indices in field of unknowns (required for irregular grids) (r-v; c-h)
 
     %% generation of data set y
     y.error      = 0;                                                       % measurement error (scalar) expressed as variance
     y.values     = transpose(heads(i,:));
-    for j=1:y.npts
-        y.edk_dem(j,1) = (y.values(j,1) + 20 + 10*rand());                  % DEM = GWL + 20 + noise
-    end
-
+%     for j=1:y.npts
+%         y.dem(j,1) = (y.values(j,1) + 20 + 10*rand());                  % DEM = GWL + 20 + noise
+%     end
+    y.dem = [30 7 5 5 25 9 50 50 37 8];
+    
     %% kriging method options
     options.superpos = 'fft';                                               % superposition method: fft or standard
     options.solver   = 'standard';                                          % solver method: fft (fft-reg, fft-irreg) or standard
